@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.env
+.streamlit/secrets.toml
+*.log
+.DS_Store
+dist/
+*.egg-info/
+.venv/
+node_modules/
