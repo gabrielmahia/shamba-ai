@@ -5,7 +5,7 @@
 AI-powered farming assistant that helps Kenyan farmers with crop disease diagnosis, weather alerts, market prices, and agricultural advice — all in natural Swahili.
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://shambaai.streamlit.app)
-[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## What it does
 
