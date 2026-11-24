@@ -1,4 +1,6 @@
 import streamlit as st
+import html
+import os
 import urllib.request
 import json
 import datetime
@@ -27,13 +29,22 @@ st.markdown("""<style>
 </style>""", unsafe_allow_html=True)
 
 # ── API Key ───────────────────────────────────────────────────────────────────
-API_KEY = st.secrets.get("GOOGLE_API_KEY") or st.secrets.get("GEMINI_API_KEY", "")
+def _secret(name):
+    """Read a Streamlit secret, falling back to the environment; never crash when no secrets file exists."""
+    try:
+        v = st.secrets.get(name)
+    except Exception:
+        v = None
+    return v or os.environ.get(name, "")
+
+
+API_KEY = _secret("GOOGLE_API_KEY") or _secret("GEMINI_API_KEY")
 
 # ── Gemini helper ─────────────────────────────────────────────────────────────
 def ask_gemini(prompt: str, system: str = "") -> str:
     if not API_KEY:
         return "❌ API key not configured. Add GOOGLE_API_KEY to .streamlit/secrets.toml"
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent"
     body = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "systemInstruction": {"parts": [{"text": system}]} if system else {},
@@ -42,12 +53,12 @@ def ask_gemini(prompt: str, system: str = "") -> str:
     try:
         req = urllib.request.Request(
             url, data=json.dumps(body).encode(),
-            headers={"Content-Type": "application/json"}, method="POST")
+            headers={"Content-Type": "application/json", "x-goog-api-key": API_KEY}, method="POST")
         with urllib.request.urlopen(req, timeout=30) as r:
             d = json.loads(r.read())
-            return d["candidates"][0]["content"]["parts"][0]["text"]
+            return html.escape(d["candidates"][0]["content"]["parts"][0]["text"])
     except Exception as e:
-        return f"❌ Error: {e}"
+        return html.escape(f"❌ Error: {e}")
 
 SYSTEM = """Wewe ni mshauri wa kilimo kwa wakulima wa Kenya.
 Jibu kwa Kiswahili wazi na rahisi kuelewa.
