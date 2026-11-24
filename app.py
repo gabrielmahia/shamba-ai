@@ -33,7 +33,7 @@ API_KEY = st.secrets.get("GOOGLE_API_KEY") or st.secrets.get("GEMINI_API_KEY", "
 def ask_gemini(prompt: str, system: str = "") -> str:
     if not API_KEY:
         return "❌ API key not configured. Add GOOGLE_API_KEY to .streamlit/secrets.toml"
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={API_KEY}"
     body = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "systemInstruction": {"parts": [{"text": system}]} if system else {},
